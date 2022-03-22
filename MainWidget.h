@@ -24,7 +24,7 @@ public:
 
 public slots:
     void flushTable();
-
+    void flushListWidget();
 
 private:
     QGroupBox * createEmpMess();

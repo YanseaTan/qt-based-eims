@@ -19,7 +19,8 @@ public:
     EditEmpMessBox();
 signals:
     void closeBox();
-
+public slots:
+    void saveEmpMess();
 public:
     void emitCloseBox();
 private:

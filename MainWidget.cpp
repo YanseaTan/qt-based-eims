@@ -55,9 +55,9 @@ QGroupBox * MainWidget::createMenu()
     Buts->addWidget(ExitBtn,1,1);
 
     //添加单个部件用addWidget()，添加一个本就是布局的组合用addLayout()
-    VBoxLayout->addWidget(FindEmpEdit,1);
-    VBoxLayout->addWidget(ListWidget,4);
-    VBoxLayout->addLayout(Buts,2);
+    VBoxLayout->addWidget(FindEmpEdit);
+    VBoxLayout->addWidget(ListWidget);
+    VBoxLayout->addLayout(Buts);
     box->setLayout(VBoxLayout);
 
     return box;
