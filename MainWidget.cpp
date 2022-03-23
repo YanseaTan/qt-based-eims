@@ -64,6 +64,7 @@ QGroupBox * MainWidget::createMenu()
     box->setLayout(VBoxLayout);
 
     connect(AddEmpBtn, &QPushButton::clicked, this, &MainWidget::addEmpBox);
+    connect(DelEmpBtn, &QPushButton::clicked, this, &MainWidget::delEmpMess);
     connect(ExitBtn, &QPushButton::clicked, this, &MainWidget::close);
     return box;
 }
@@ -124,7 +125,42 @@ void MainWidget::flushListWidget(int row)
 
 void MainWidget::delEmpMess()
 {
+    QList<QTableWidgetItem*>items = TableWidget->selectedItems();
+    if(items.count() > 0)
+    {
+        QMessageBox::StandardButton result = QMessageBox::question(this, "删除", "确定要删除工号为【" + items.at(0)->text() + "】的职工吗？");
+        if(result == QMessageBox::Yes)
+        {
+            QString ID, name, sex, dept, tel, email;
+            QFile file(FILE_NAME);
+            file.open(QIODevice::ReadOnly);
+            QDataStream readDataStr(&file);
 
+            QFile tempFile(TEMP_FILE_NAME);
+            tempFile.open(QIODevice::WriteOnly);
+            QDataStream writeDataStr(&tempFile);
+
+            while(!readDataStr.atEnd())
+            {
+                readDataStr >> ID >> name >> sex >> dept >> tel >> email;
+                if(ID != items.at(0)->text())
+                {
+                    writeDataStr << ID << name << sex << dept << tel << email;
+                }
+            }
+
+            tempFile.close();
+            file.close();
+            file.remove();
+            tempFile.rename(FILE_NAME);
+            flushTable();
+            ListWidget->clear();
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this, "提示", "请选择要删除的职工");
+    }
 }
 
 void MainWidget::findEmpMess()
