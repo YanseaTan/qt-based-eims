@@ -65,6 +65,7 @@ QGroupBox * MainWidget::createMenu()
 
     connect(AddEmpBtn, &QPushButton::clicked, this, &MainWidget::addEmpBox);
     connect(DelEmpBtn, &QPushButton::clicked, this, &MainWidget::delEmpMess);
+    connect(FindEmpEdit, &QLineEdit::returnPressed, this, &MainWidget::findEmpMess);
     connect(ExitBtn, &QPushButton::clicked, this, &MainWidget::close);
     return box;
 }
@@ -165,7 +166,27 @@ void MainWidget::delEmpMess()
 
 void MainWidget::findEmpMess()
 {
-
+    //获得当前表格行数
+    qint32 count = TableWidget->rowCount();
+    bool findSuccess = false;
+    if(count > 0)
+    {
+        for(qint32 i = 0; i < count; i++)
+        {
+            QString name = TableWidget->item(i, 1)->text();
+            if(name == FindEmpEdit->text())
+            {
+                findSuccess = true;
+                TableWidget->selectRow(i);
+                flushListWidget(i);
+                break;
+            }
+        }
+        if(findSuccess == false)
+        {
+            QMessageBox::information(this, "查找失败", "当前表格中没有【" + FindEmpEdit->text() + "】职工");
+        }
+    }
 }
 
 void MainWidget::changeEmpMess(int row)
