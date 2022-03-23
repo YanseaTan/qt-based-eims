@@ -31,6 +31,9 @@ QGroupBox * MainWidget::createEmpMess()
     AutoHBoxLayout->addWidget(TableWidget);
     box->setLayout(AutoHBoxLayout);
 
+    connect(TableWidget, &QTableWidget::cellClicked, this, &MainWidget::flushListWidget);
+    connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::changeEmpMess);
+    connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::flushListWidget);
     return box;
 }
 
@@ -60,6 +63,8 @@ QGroupBox * MainWidget::createMenu()
     VBoxLayout->addLayout(Buts);
     box->setLayout(VBoxLayout);
 
+    connect(AddEmpBtn, &QPushButton::clicked, this, &MainWidget::addEmpBox);
+    connect(ExitBtn, &QPushButton::clicked, this, &MainWidget::close);
     return box;
 }
 
