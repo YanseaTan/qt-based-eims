@@ -55,7 +55,7 @@ void EditEmpMessBox::saveEmpMess()
         //以（只写|追加）的方式打开文件
         file.open(QIODevice::WriteOnly|QIODevice::Append);
         QTextStream textStr(&file);
-        textStr << emp.getID() << " " << emp.getName() << " " << emp.getSex() << " " << emp.getDept() << " " << emp.getTel() << " " << emp.getEmail();
+        textStr << emp.getID() << " " << emp.getName() << " " << emp.getSex() << " " << emp.getDept() << " " << emp.getTel() << " " << emp.getEmail() << "\t";
         file.close();
         this->close();
         //添加完成后发出关闭添加页面的信号
