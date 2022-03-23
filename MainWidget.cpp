@@ -3,6 +3,7 @@
 
 MainWidget::MainWidget()
 {
+    setWindowIcon(QIcon(":/logo.ico"));
     setWindowTitle("职工信息管理系统");
     this->resize(1000,600);
 
