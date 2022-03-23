@@ -191,7 +191,38 @@ void MainWidget::findEmpMess()
 
 void MainWidget::changeEmpMess(int row)
 {
+    QString ID, name, sex, dept, tel, email;
+    QString empName = TableWidget->item(row, 1)->text();
+    QFile file(FILE_NAME);
+    file.open(QIODevice::ReadOnly);
+    QDataStream readDataStr(&file);
 
+    QFile tempFile(TEMP_FILE_NAME);
+    tempFile.open(QIODevice::WriteOnly);
+    QDataStream writeDataStr(&tempFile);
+
+    while(!readDataStr.atEnd())
+    {
+        readDataStr >> ID >> name >> sex >> dept >> tel >> email;
+        //如果当前行不是要修改的那行，就从原文件读到的数据进行写入
+        if(name != empName)
+        {
+            writeDataStr << ID << name << sex << dept << tel << email;
+        }
+        //如果当前行是要修改的那行，就从表格中那行的数据进行写入
+        else
+        {
+            for(int i = 0; i < TableWidget->columnCount(); i++)
+            {
+                writeDataStr << TableWidget->item(row, i)->text();
+            }
+        }
+    }
+
+    tempFile.close();
+    file.close();
+    file.remove();
+    tempFile.rename(FILE_NAME);
 }
 
 void MainWidget::saveEmpMess()
