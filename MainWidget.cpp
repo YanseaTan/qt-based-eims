@@ -94,15 +94,32 @@ void MainWidget::flushTable()
         TableWidget->setItem(TableWidget->rowCount()-1,3,new QTableWidgetItem(dept));
         TableWidget->setItem(TableWidget->rowCount()-1,4,new QTableWidgetItem(tel));
         TableWidget->setItem(TableWidget->rowCount()-1,5,new QTableWidgetItem(email));
-        file.close();
-
-
     }
+    file.close();
+    connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::changeEmpMess);
+    connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::flushListWidget);
 }
 
 void MainWidget::flushListWidget(int row)
 {
-
+    if(ListWidget->count() > 0)
+    {
+        ListWidget->item(0)->setText("工 号：" + TableWidget->item(row, 0)->text());
+        ListWidget->item(1)->setText("姓 名：" + TableWidget->item(row, 1)->text());
+        ListWidget->item(2)->setText("性 别：" + TableWidget->item(row, 2)->text());
+        ListWidget->item(3)->setText("职 级：" + TableWidget->item(row, 3)->text());
+        ListWidget->item(4)->setText("电 话：" + TableWidget->item(row, 4)->text());
+        ListWidget->item(5)->setText("邮 箱：" + TableWidget->item(row, 5)->text());
+    }
+    else
+    {
+        ListWidget->addItem("工 号：" + TableWidget->item(row, 0)->text());
+        ListWidget->addItem("姓 名：" + TableWidget->item(row, 1)->text());
+        ListWidget->addItem("性 别：" + TableWidget->item(row, 2)->text());
+        ListWidget->addItem("职 级：" + TableWidget->item(row, 3)->text());
+        ListWidget->addItem("电 话：" + TableWidget->item(row, 4)->text());
+        ListWidget->addItem("邮 箱：" + TableWidget->item(row, 5)->text());
+    }
 }
 
 void MainWidget::delEmpMess()
