@@ -13,6 +13,7 @@
 #include "Tool.h"
 #include "Employee.h"
 
+//创建的 EditEmpMessBox 类是一个 QDialog 对话框类型的窗口
 class EditEmpMessBox : public QDialog
 {
     Q_OBJECT

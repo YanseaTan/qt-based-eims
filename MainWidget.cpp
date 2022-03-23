@@ -19,6 +19,7 @@ MainWidget::MainWidget()
     HBoxLayout->addWidget(Right_Box,1);
 }
 
+//创建左侧职工信息面板
 QGroupBox * MainWidget::createEmpMess()
 {
     QGroupBox * box = new QGroupBox("职工信息");
@@ -28,31 +29,41 @@ QGroupBox * MainWidget::createEmpMess()
     TableWidget->setHorizontalHeaderLabels(QStringList() <<"工号"<<"姓名"<<"性别"<<"职级"<<"电话"<<"邮箱");
     //刷新表格信息
     flushTable();
+    //添加水平布局，将表格布局进去
     QHBoxLayout * AutoHBoxLayout = new QHBoxLayout;
     AutoHBoxLayout->addWidget(TableWidget);
     box->setLayout(AutoHBoxLayout);
 
+    //点击表格中的内容时，刷新右侧显示的信息列表
     connect(TableWidget, &QTableWidget::cellClicked, this, &MainWidget::flushListWidget);
+    //表格中的内容发生更改时，触发更改员工信息函数，并刷新右侧显示的信息列表
     connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::changeEmpMess);
     connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::flushListWidget);
     return box;
 }
 
+//创建右侧功能面板
 QGroupBox * MainWidget::createMenu()
 {
     QGroupBox * box = new QGroupBox("功能面板");
+    //创建总的垂直布局
     QVBoxLayout * VBoxLayout = new QVBoxLayout;
-
-    ListWidget = new QListWidget;
+    //创建局部网格布局
     QGridLayout * Buts = new QGridLayout;
+
+    //创建列表部件
+    ListWidget = new QListWidget;
+    //创建功能按钮
     AddEmpBtn = new QPushButton("添加");
     DelEmpBtn = new QPushButton("删除");
     SaveBtn = new QPushButton("保存");
     ExitBtn = new QPushButton("退出");
+    //创建查找输入框
     FindEmpEdit = new QLineEdit;
     FindEmpEdit->setPlaceholderText("输入职工姓名查找...");
     FindEmpEdit->setClearButtonEnabled(true);
     FindEmpEdit->setStyleSheet("QLineEdit{padding:3,3,3,3;}");
+
     Buts->addWidget(AddEmpBtn,0,0);
     Buts->addWidget(DelEmpBtn,0,1);
     Buts->addWidget(SaveBtn,1,0);
@@ -64,6 +75,7 @@ QGroupBox * MainWidget::createMenu()
     VBoxLayout->addLayout(Buts);
     box->setLayout(VBoxLayout);
 
+    //关联点击每一个按钮（输入框）以及会触发的槽（功能函数）
     connect(FindEmpEdit, &QLineEdit::returnPressed, this, &MainWidget::findEmpMess);
     connect(AddEmpBtn, &QPushButton::clicked, this, &MainWidget::addEmpBox);
     connect(DelEmpBtn, &QPushButton::clicked, this, &MainWidget::delEmpMess);
@@ -72,16 +84,22 @@ QGroupBox * MainWidget::createMenu()
     return box;
 }
 
+//添加职工
 void MainWidget::addEmpBox()
 {
+    //添加职工需要弹出一个单独有功能的窗口，所以单独建了一个 EditEmpMessBox 类，是一个 QDialog 对话框窗口
     messBox = new EditEmpMessBox;
+    //如果 messBox 发出了 closeBox 的信号（添加完成），则触发刷新左侧表格和清除右侧列表的槽
     QObject::connect(messBox, &EditEmpMessBox::closeBox, this, &MainWidget::flushTable);
     QObject::connect(messBox, &EditEmpMessBox::closeBox, ListWidget, &QListWidget::clear);
+    //返回值，结束窗口
     messBox->exec();
 }
 
+//刷新表格中的内容，当界面初始化、添加和删除职工信息后，都需要对表格内容进行更新
 void MainWidget::flushTable()
 {
+    //更新表格内容前，要断开与 cellChanged 信号关联的所有槽，否则会导致程序闪退
     disconnect(TableWidget, &QTableWidget::cellChanged,0,0);
     QFile file(FILE_NAME);
     file.open(QIODevice::ReadOnly);
@@ -91,7 +109,9 @@ void MainWidget::flushTable()
     while(!textStr.atEnd())
     {
         TableWidget->setRowCount(TableWidget->rowCount()+1);
-        textStr>>id>>name>>sex>>dept>>tel>>email;
+        //将文件中的数据读到内存
+        textStr >> id >> name >> sex >> dept >> tel >> email;
+        //将读到的数据依次填入到表格中
         TableWidget->setItem(TableWidget->rowCount()-1,0,new QTableWidgetItem(id));
         TableWidget->setItem(TableWidget->rowCount()-1,1,new QTableWidgetItem(name));
         TableWidget->setItem(TableWidget->rowCount()-1,2,new QTableWidgetItem(sex));
@@ -100,12 +120,15 @@ void MainWidget::flushTable()
         TableWidget->setItem(TableWidget->rowCount()-1,5,new QTableWidgetItem(email));
     }
     file.close();
+    //完成更新表格的任务后，重新关联与 cellChanged 相关的槽
     connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::changeEmpMess);
     connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::flushListWidget);
 }
 
+//刷新右侧信息列表，需要输入一个行数
 void MainWidget::flushListWidget(int row)
 {
+    //当列表中有信息时，直接修改
     if(ListWidget->count() > 0)
     {
         ListWidget->item(0)->setText("工 号：" + TableWidget->item(row, 0)->text());
@@ -115,6 +138,7 @@ void MainWidget::flushListWidget(int row)
         ListWidget->item(4)->setText("电 话：" + TableWidget->item(row, 4)->text());
         ListWidget->item(5)->setText("邮 箱：" + TableWidget->item(row, 5)->text());
     }
+    //当列表中没有信息时，直接添加
     else
     {
         ListWidget->addItem("工 号：" + TableWidget->item(row, 0)->text());
@@ -126,14 +150,19 @@ void MainWidget::flushListWidget(int row)
     }
 }
 
+//删除职工信息
 void MainWidget::delEmpMess()
 {
-    QList<QTableWidgetItem*>items = TableWidget->selectedItems();
+    //将选中的列表内容赋予给 items
+    QList <QTableWidgetItem*> items = TableWidget->selectedItems();
+    //如果选中了列表内容，则进行删除确认
     if(items.count() > 0)
     {
+        //创建 QMessageBox 中的 question 类型，用作删除确认
         QMessageBox::StandardButton result = QMessageBox::question(this, "删除", "确定要删除工号为【" + items.at(0)->text() + "】的职工吗？");
         if(result == QMessageBox::Yes)
         {
+            //将除目标学生外，其它学生的信息拷贝到一个临时文件中，然后删除原来的文件，并将临时文件的文件名改为和原文件相同的名称
             QString ID, name, sex, dept, tel, email;
             QFile file(FILE_NAME);
             file.open(QIODevice::ReadOnly);
@@ -157,6 +186,7 @@ void MainWidget::delEmpMess()
             file.remove();
             tempFile.rename(FILE_NAME);
             flushTable();
+            //清除右侧列表显示内容
             ListWidget->clear();
         }
     }
@@ -166,9 +196,10 @@ void MainWidget::delEmpMess()
     }
 }
 
+//根据姓名查找职工信息
 void MainWidget::findEmpMess()
 {
-    //获得当前表格行数
+    //获得当前表格行数，qint32 为无符号32比特数据类型
     qint32 count = TableWidget->rowCount();
     bool findSuccess = false;
     if(count > 0)
@@ -179,6 +210,7 @@ void MainWidget::findEmpMess()
             if(name == FindEmpEdit->text())
             {
                 findSuccess = true;
+                //如果名字对上了，则左侧表格中选中对应行并刷新右侧信息列表，跳出循环
                 TableWidget->selectRow(i);
                 flushListWidget(i);
                 break;
@@ -191,6 +223,7 @@ void MainWidget::findEmpMess()
     }
 }
 
+//将职工信息变动保存到文件中
 void MainWidget::changeEmpMess(int row)
 {
     QString ID, name, sex, dept, tel, email;
@@ -227,6 +260,7 @@ void MainWidget::changeEmpMess(int row)
     tempFile.rename(FILE_NAME);
 }
 
+//保存职工信息
 void MainWidget::saveEmpMess()
 {
     QFile file(FILE_NAME);
