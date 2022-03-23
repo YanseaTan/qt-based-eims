@@ -17,12 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     EditEmpMessBox.cpp \
+    Employee.cpp \
     Tool.cpp \
     main.cpp \
     MainWidget.cpp
 
 HEADERS += \
     EditEmpMessBox.h \
+    Employee.h \
     MainWidget.h \
     Tool.h
 

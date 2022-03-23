@@ -11,6 +11,7 @@
 #include <QDataStream>
 #include <QMessageBox>
 #include "Tool.h"
+#include "Employee.h"
 
 class EditEmpMessBox : public QDialog
 {

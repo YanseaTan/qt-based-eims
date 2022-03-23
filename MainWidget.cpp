@@ -9,7 +9,7 @@ MainWidget::MainWidget()
     //创建水平布局
     QHBoxLayout *HBoxLayout = new QHBoxLayout(this);
 
-    //创建两个分组框
+    //创建两个面板框
     QGroupBox *Left_Box = createEmpMess();
     QGroupBox *Right_Box = createMenu();
 
@@ -25,7 +25,7 @@ QGroupBox * MainWidget::createEmpMess()
     TableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     TableWidget->setColumnCount(6);
     TableWidget->setHorizontalHeaderLabels(QStringList() <<"工号"<<"姓名"<<"性别"<<"职级"<<"电话"<<"邮箱");
-    //见尾部自定义的刷新表格函数
+    //刷新表格信息
     flushTable();
     QHBoxLayout * AutoHBoxLayout = new QHBoxLayout;
     AutoHBoxLayout->addWidget(TableWidget);
@@ -63,6 +63,11 @@ QGroupBox * MainWidget::createMenu()
     return box;
 }
 
+void MainWidget::addEmpBox()
+{
+
+}
+
 void MainWidget::flushTable()
 {
     disconnect(TableWidget, &QTableWidget::cellChanged,0,0);
@@ -85,4 +90,29 @@ void MainWidget::flushTable()
 
 
     }
+}
+
+void MainWidget::flushListWidget(int row)
+{
+
+}
+
+void MainWidget::delEmpMess()
+{
+
+}
+
+void MainWidget::findEmpMess()
+{
+
+}
+
+void MainWidget::changeEmpMess(int row)
+{
+
+}
+
+void MainWidget::saveEmpMess()
+{
+
 }

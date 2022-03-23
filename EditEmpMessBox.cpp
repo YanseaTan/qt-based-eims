@@ -37,5 +37,31 @@ EditEmpMessBox::EditEmpMessBox()
 
 void EditEmpMessBox::saveEmpMess()
 {
+    if(this->ID->text() != "" && this->name->text() != "" && this->sex->text() != "" && this->dept->text() != "" && this->tel->text() != "" && this->email->text() != "")
+    {
+        Employee emp;
+        emp.setID(this->ID->text());
+        emp.setName(this->name->text());
+        emp.setSex(this->sex->text());
+        emp.setDept(this->dept->text());
+        emp.setTel(this->tel->text());
+        emp.setEmail(this->email->text());
 
+        QFile file(FILE_NAME);
+        file.open(QIODevice::WriteOnly|QIODevice::Append);
+        QDataStream dataStr(&file);
+        dataStr << emp.getID() << emp.getName() << emp.getSex() << emp.getDept() << emp.getTel() << emp.getEmail();
+        file.close();
+        this->close();
+        emitCloseBox();
+    }
+    else
+    {
+        QMessageBox::warning(this, "提示", "请将信息填写完整", QMessageBox::Ok);
+    }
+}
+
+void EditEmpMessBox::emitCloseBox()
+{
+    emit closeBox();
 }

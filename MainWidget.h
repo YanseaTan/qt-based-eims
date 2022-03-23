@@ -13,21 +13,32 @@
 #include <QDataStream>
 #include "EditEmpMessBox.h"
 #include "Tool.h"
+#include "Employee.h"
 
 class MainWidget : public QWidget
 {
     Q_OBJECT
 
 public:
+    //创建主窗口
     MainWidget();
+    //当用户点击添加按钮时，弹出添加职工信息窗口
     void addEmpBox();
 
 public slots:
+    //更新左侧表格中的职工信息
     void flushTable();
-    void flushListWidget();
+    //更新右侧列表中的职工信息
+    void flushListWidget(int row);
+    void delEmpMess();
+    void findEmpMess();
+    void changeEmpMess(int row);
+    void saveEmpMess();
 
 private:
+    //创建左侧职工信息面板
     QGroupBox * createEmpMess();
+    //创建右侧功能面板
     QGroupBox * createMenu();
 
 private:
