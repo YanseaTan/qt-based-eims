@@ -63,9 +63,10 @@ QGroupBox * MainWidget::createMenu()
     VBoxLayout->addLayout(Buts);
     box->setLayout(VBoxLayout);
 
+    connect(FindEmpEdit, &QLineEdit::returnPressed, this, &MainWidget::findEmpMess);
     connect(AddEmpBtn, &QPushButton::clicked, this, &MainWidget::addEmpBox);
     connect(DelEmpBtn, &QPushButton::clicked, this, &MainWidget::delEmpMess);
-    connect(FindEmpEdit, &QLineEdit::returnPressed, this, &MainWidget::findEmpMess);
+    connect(SaveBtn, &QPushButton::clicked, this, &MainWidget::saveEmpMess);
     connect(ExitBtn, &QPushButton::clicked, this, &MainWidget::close);
     return box;
 }
@@ -227,5 +228,17 @@ void MainWidget::changeEmpMess(int row)
 
 void MainWidget::saveEmpMess()
 {
+    QFile file(FILE_NAME);
+    file.open(QIODevice::WriteOnly);
+    QDataStream dataStr(&file);
 
+    for(int i = 0; i < TableWidget->rowCount(); i++)
+    {
+        for(int j = 0; j < TableWidget->columnCount(); j++)
+        {
+            dataStr << TableWidget->item(i, j)->text();
+        }
+    }
+    file.close();
+    QMessageBox::information(this, "保存", "保存成功！");
 }
