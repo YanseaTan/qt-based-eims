@@ -3,8 +3,9 @@
 EditEmpMessBox::EditEmpMessBox()
 {
     setWindowTitle("添加职工信息");
+    //创建垂直布局
     QVBoxLayout * VBox = new QVBoxLayout;
-
+    //创建表单布局
     QFormLayout * FormLayout = new QFormLayout;
     ID = new QLineEdit;
     name = new QLineEdit;
@@ -12,15 +13,16 @@ EditEmpMessBox::EditEmpMessBox()
     dept = new QLineEdit;
     tel = new QLineEdit;
     email = new QLineEdit;
-    FormLayout->addRow("工号：",ID);
-    FormLayout->addRow("姓名：",name);
-    FormLayout->addRow("性别：",sex);
-    FormLayout->addRow("职级：",dept);
-    FormLayout->addRow("电话：",tel);
-    FormLayout->addRow("邮箱：",email);
+    FormLayout->addRow("工 号：",ID);
+    FormLayout->addRow("姓 名：",name);
+    FormLayout->addRow("性 别：",sex);
+    FormLayout->addRow("职 级：",dept);
+    FormLayout->addRow("电 话：",tel);
+    FormLayout->addRow("邮 箱：",email);
     //标签有足够的空间适应，如果最小大小比可用空间大，输入框会被换到下一行
     FormLayout->setRowWrapPolicy(QFormLayout::WrapLongRows);
 
+    //创建水平布局
     QHBoxLayout * HBox = new QHBoxLayout;
     submit = new QPushButton("提交");
     cancel = new QPushButton("取消");
@@ -31,12 +33,14 @@ EditEmpMessBox::EditEmpMessBox()
     VBox->addLayout(HBox,1);
     this->setLayout(VBox);
 
+    //提交信息触发 saveEmpMess 这个自定义的槽
     QObject::connect(submit, &QPushButton::clicked, this, &EditEmpMessBox::saveEmpMess);
     QObject::connect(cancel, &QPushButton::clicked, this, &EditEmpMessBox::close);
 }
 
 void EditEmpMessBox::saveEmpMess()
 {
+    //判断所有数据是否都已经填写
     if(this->ID->text() != "" && this->name->text() != "" && this->sex->text() != "" && this->dept->text() != "" && this->tel->text() != "" && this->email->text() != "")
     {
         Employee emp;
@@ -48,11 +52,13 @@ void EditEmpMessBox::saveEmpMess()
         emp.setEmail(this->email->text());
 
         QFile file(FILE_NAME);
+        //以（只写|追加）的方式打开文件
         file.open(QIODevice::WriteOnly|QIODevice::Append);
-        QDataStream dataStr(&file);
-        dataStr << emp.getID() << emp.getName() << emp.getSex() << emp.getDept() << emp.getTel() << emp.getEmail();
+        QTextStream textStr(&file);
+        textStr << emp.getID() << " " << emp.getName() << " " << emp.getSex() << " " << emp.getDept() << " " << emp.getTel() << " " << emp.getEmail();
         file.close();
         this->close();
+        //添加完成后发出关闭添加页面的信号
         emitCloseBox();
     }
     else

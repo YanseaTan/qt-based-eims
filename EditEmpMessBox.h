@@ -8,7 +8,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFile>
-#include <QDataStream>
+#include <QTextStream>
 #include <QMessageBox>
 #include "Tool.h"
 #include "Employee.h"
@@ -23,6 +23,7 @@ signals:
 public slots:
     void saveEmpMess();
 public:
+    //发出 closeBox 信号
     void emitCloseBox();
 private:
     QLineEdit * ID;

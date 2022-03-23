@@ -10,7 +10,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QFile>
-#include <QDataStream>
+#include <QTextStream>
 #include "EditEmpMessBox.h"
 #include "Tool.h"
 #include "Employee.h"

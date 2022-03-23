@@ -5,7 +5,7 @@ MainWidget::MainWidget()
 {
     setWindowIcon(QIcon(":/logo.ico"));
     setWindowTitle("职工信息管理系统");
-    this->resize(1000,600);
+    this->resize(1020,600);
 
     //创建水平布局
     QHBoxLayout *HBoxLayout = new QHBoxLayout(this);
@@ -85,13 +85,13 @@ void MainWidget::flushTable()
     disconnect(TableWidget, &QTableWidget::cellChanged,0,0);
     QFile file(FILE_NAME);
     file.open(QIODevice::ReadOnly);
-    QDataStream dataStr(&file);
+    QTextStream textStr(&file);
     QString id, name, sex, dept, tel, email;
     TableWidget->setRowCount(0);
-    while(!dataStr.atEnd())
+    while(!textStr.atEnd())
     {
         TableWidget->setRowCount(TableWidget->rowCount()+1);
-        dataStr>>id>>name>>sex>>dept>>tel>>email;
+        textStr>>id>>name>>sex>>dept>>tel>>email;
         TableWidget->setItem(TableWidget->rowCount()-1,0,new QTableWidgetItem(id));
         TableWidget->setItem(TableWidget->rowCount()-1,1,new QTableWidgetItem(name));
         TableWidget->setItem(TableWidget->rowCount()-1,2,new QTableWidgetItem(sex));
@@ -137,18 +137,18 @@ void MainWidget::delEmpMess()
             QString ID, name, sex, dept, tel, email;
             QFile file(FILE_NAME);
             file.open(QIODevice::ReadOnly);
-            QDataStream readDataStr(&file);
+            QTextStream readTextStr(&file);
 
             QFile tempFile(TEMP_FILE_NAME);
             tempFile.open(QIODevice::WriteOnly);
-            QDataStream writeDataStr(&tempFile);
+            QTextStream writeTextStr(&tempFile);
 
-            while(!readDataStr.atEnd())
+            while(!readTextStr.atEnd())
             {
-                readDataStr >> ID >> name >> sex >> dept >> tel >> email;
+                readTextStr >> ID >> name >> sex >> dept >> tel >> email;
                 if(ID != items.at(0)->text())
                 {
-                    writeDataStr << ID << name << sex << dept << tel << email;
+                    writeTextStr << ID << " " << name << " " << sex << " " << dept << " " << tel << " " << email << "\t";
                 }
             }
 
@@ -197,26 +197,26 @@ void MainWidget::changeEmpMess(int row)
     QString empName = TableWidget->item(row, 1)->text();
     QFile file(FILE_NAME);
     file.open(QIODevice::ReadOnly);
-    QDataStream readDataStr(&file);
+    QTextStream readTextStr(&file);
 
     QFile tempFile(TEMP_FILE_NAME);
     tempFile.open(QIODevice::WriteOnly);
-    QDataStream writeDataStr(&tempFile);
+    QTextStream writeTextStr(&tempFile);
 
-    while(!readDataStr.atEnd())
+    while(!readTextStr.atEnd())
     {
-        readDataStr >> ID >> name >> sex >> dept >> tel >> email;
+        readTextStr >> ID >> name >> sex >> dept >> tel >> email;
         //如果当前行不是要修改的那行，就从原文件读到的数据进行写入
         if(name != empName)
         {
-            writeDataStr << ID << name << sex << dept << tel << email;
+            writeTextStr << ID << " " << name << " " << sex << " " << dept << " " << tel << " " << email << "\t";
         }
         //如果当前行是要修改的那行，就从表格中那行的数据进行写入
         else
         {
             for(int i = 0; i < TableWidget->columnCount(); i++)
             {
-                writeDataStr << TableWidget->item(row, i)->text();
+                writeTextStr << TableWidget->item(row, i)->text() << " ";
             }
         }
     }
@@ -231,14 +231,15 @@ void MainWidget::saveEmpMess()
 {
     QFile file(FILE_NAME);
     file.open(QIODevice::WriteOnly);
-    QDataStream dataStr(&file);
+    QTextStream textStr(&file);
 
     for(int i = 0; i < TableWidget->rowCount(); i++)
     {
         for(int j = 0; j < TableWidget->columnCount(); j++)
         {
-            dataStr << TableWidget->item(i, j)->text();
+            textStr << TableWidget->item(i, j)->text() << " ";
         }
+        textStr << "\n";
     }
     file.close();
     QMessageBox::information(this, "保存", "保存成功！");
