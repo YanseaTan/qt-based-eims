@@ -70,7 +70,10 @@ QGroupBox * MainWidget::createMenu()
 
 void MainWidget::addEmpBox()
 {
-
+    messBox = new EditEmpMessBox;
+    QObject::connect(messBox, &EditEmpMessBox::closeBox, this, &MainWidget::flushTable);
+    QObject::connect(messBox, &EditEmpMessBox::closeBox, ListWidget, &QListWidget::clear);
+    messBox->exec();
 }
 
 void MainWidget::flushTable()
