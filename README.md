@@ -23,7 +23,7 @@ A Qt-based visual employee information management system
 ## 思路
 
 - 通过创建`MainWidget`实现主界面的所有功能，通过`QGroupBox`实现左右两大面板的划分。
-- 通过创建`EditEmpInfBox`实现添加职工信息的对话框界面。
+- 通过创建`EditEmpInfoBox`实现添加职工信息的对话框界面。
 - 创建职工类`Employee`方便信息的读取与写入。
 - 通过`QTableWidget`管理内存中的职工信息，并用`QListWidget`来进行信息的列表展示。
 - 通过`QFile`实现文件读写完成数据的持久化。
