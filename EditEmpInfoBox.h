@@ -1,5 +1,5 @@
-#ifndef EDITEMPINFBOX_H
-#define EDITEMPINFBOX_H
+#ifndef EDITEMPINFOBOX_H
+#define EDITEMPINFOBOX_H
 
 #include <QWidget>
 #include <QLineEdit>
@@ -13,16 +13,16 @@
 #include "Tool.h"
 #include "Employee.h"
 
-//创建的 EditEmpInfBox 类是一个 QDialog 对话框类型的窗口
-class EditEmpInfBox : public QDialog
+//创建的 EditEmpInfoBox 类是一个 QDialog 对话框类型的窗口
+class EditEmpInfoBox : public QDialog
 {
     Q_OBJECT
 public:
-    EditEmpInfBox();
+    EditEmpInfoBox();
 signals:
     void closeBox();
 public slots:
-    void saveEmpInf();
+    void saveEmpInfo();
 public:
     //发出 closeBox 信号
     void emitCloseBox();
@@ -37,4 +37,4 @@ private:
     QPushButton * cancel;
 };
 
-#endif // EDITEMPINFBOX_H
+#endif // EDITEMPINFOBOX_H

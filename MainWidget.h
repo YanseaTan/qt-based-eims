@@ -11,7 +11,7 @@
 #include <QLineEdit>
 #include <QFile>
 #include <QTextStream>
-#include "EditEmpInfBox.h"
+#include "EditEmpInfoBox.h"
 #include "Tool.h"
 #include "Employee.h"
 
@@ -30,14 +30,14 @@ public slots:
     void flushTable();
     //更新右侧列表中的职工信息
     void flushListWidget(int row);
-    void delEmpInf();
-    void findEmpInf();
-    void changeEmpInf(int row);
-    void saveEmpInf();
+    void delEmpInfo();
+    void findEmpInfo();
+    void changeEmpInfo(int row);
+    void saveEmpInfo();
 
 private:
     //创建左侧职工信息面板
-    QGroupBox * createEmpInf();
+    QGroupBox * createEmpInfo();
     //创建右侧功能面板
     QGroupBox * createMenu();
 
@@ -49,6 +49,6 @@ private:
     QPushButton * SaveBtn;
     QPushButton * ExitBtn;
     QLineEdit * FindEmpEdit;
-    EditEmpInfBox * infBox;
+    EditEmpInfoBox * infoBox;
 };
 #endif // MAINWINDOW_H
