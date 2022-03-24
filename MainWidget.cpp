@@ -11,7 +11,7 @@ MainWidget::MainWidget()
     QHBoxLayout *HBoxLayout = new QHBoxLayout(this);
 
     //创建两个面板框
-    QGroupBox *Left_Box = createEmpMess();
+    QGroupBox *Left_Box = createEmpInf();
     QGroupBox *Right_Box = createMenu();
 
     //拉伸系数比为2：1
@@ -20,7 +20,7 @@ MainWidget::MainWidget()
 }
 
 //创建左侧职工信息面板
-QGroupBox * MainWidget::createEmpMess()
+QGroupBox * MainWidget::createEmpInf()
 {
     QGroupBox * box = new QGroupBox("职工信息");
     TableWidget = new QTableWidget;
@@ -37,7 +37,7 @@ QGroupBox * MainWidget::createEmpMess()
     //点击表格中的内容时，刷新右侧显示的信息列表
     connect(TableWidget, &QTableWidget::cellClicked, this, &MainWidget::flushListWidget);
     //表格中的内容发生更改时，触发更改员工信息函数，并刷新右侧显示的信息列表
-    connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::changeEmpMess);
+    connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::changeEmpInf);
     connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::flushListWidget);
     return box;
 }
@@ -76,10 +76,10 @@ QGroupBox * MainWidget::createMenu()
     box->setLayout(VBoxLayout);
 
     //关联点击每一个按钮（输入框）以及会触发的槽（功能函数）
-    connect(FindEmpEdit, &QLineEdit::returnPressed, this, &MainWidget::findEmpMess);
+    connect(FindEmpEdit, &QLineEdit::returnPressed, this, &MainWidget::findEmpInf);
     connect(AddEmpBtn, &QPushButton::clicked, this, &MainWidget::addEmpBox);
-    connect(DelEmpBtn, &QPushButton::clicked, this, &MainWidget::delEmpMess);
-    connect(SaveBtn, &QPushButton::clicked, this, &MainWidget::saveEmpMess);
+    connect(DelEmpBtn, &QPushButton::clicked, this, &MainWidget::delEmpInf);
+    connect(SaveBtn, &QPushButton::clicked, this, &MainWidget::saveEmpInf);
     connect(ExitBtn, &QPushButton::clicked, this, &MainWidget::close);
     return box;
 }
@@ -87,13 +87,13 @@ QGroupBox * MainWidget::createMenu()
 //添加职工
 void MainWidget::addEmpBox()
 {
-    //添加职工需要弹出一个单独有功能的窗口，所以单独建了一个 EditEmpMessBox 类，是一个 QDialog 对话框窗口
-    messBox = new EditEmpMessBox;
-    //如果 messBox 发出了 closeBox 的信号（添加完成），则触发刷新左侧表格和清除右侧列表的槽
-    QObject::connect(messBox, &EditEmpMessBox::closeBox, this, &MainWidget::flushTable);
-    QObject::connect(messBox, &EditEmpMessBox::closeBox, ListWidget, &QListWidget::clear);
+    //添加职工需要弹出一个单独有功能的窗口，所以单独建了一个 EditEmpInfBox 类，是一个 QDialog 对话框窗口
+    infBox = new EditEmpInfBox;
+    //如果 infBox 发出了 closeBox 的信号（添加完成），则触发刷新左侧表格和清除右侧列表的槽
+    QObject::connect(infBox, &EditEmpInfBox::closeBox, this, &MainWidget::flushTable);
+    QObject::connect(infBox, &EditEmpInfBox::closeBox, ListWidget, &QListWidget::clear);
     //返回值，结束窗口
-    messBox->exec();
+    infBox->exec();
 }
 
 //刷新表格中的内容，当界面初始化、添加和删除职工信息后，都需要对表格内容进行更新
@@ -121,7 +121,7 @@ void MainWidget::flushTable()
     }
     file.close();
     //完成更新表格的任务后，重新关联与 cellChanged 相关的槽
-    connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::changeEmpMess);
+    connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::changeEmpInf);
     connect(TableWidget, &QTableWidget::cellChanged, this, &MainWidget::flushListWidget);
 }
 
@@ -151,7 +151,7 @@ void MainWidget::flushListWidget(int row)
 }
 
 //删除职工信息
-void MainWidget::delEmpMess()
+void MainWidget::delEmpInf()
 {
     //将选中的列表内容赋予给 items
     QList <QTableWidgetItem*> items = TableWidget->selectedItems();
@@ -197,7 +197,7 @@ void MainWidget::delEmpMess()
 }
 
 //根据姓名查找职工信息
-void MainWidget::findEmpMess()
+void MainWidget::findEmpInf()
 {
     //获得当前表格行数，qint32 为无符号32比特数据类型
     qint32 count = TableWidget->rowCount();
@@ -224,7 +224,7 @@ void MainWidget::findEmpMess()
 }
 
 //将职工信息变动保存到文件中
-void MainWidget::changeEmpMess(int row)
+void MainWidget::changeEmpInf(int row)
 {
     QString ID, name, sex, dept, tel, email;
     QString empName = TableWidget->item(row, 1)->text();
@@ -261,7 +261,7 @@ void MainWidget::changeEmpMess(int row)
 }
 
 //保存职工信息
-void MainWidget::saveEmpMess()
+void MainWidget::saveEmpInf()
 {
     QFile file(FILE_NAME);
     file.open(QIODevice::WriteOnly);

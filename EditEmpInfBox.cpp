@@ -1,6 +1,6 @@
-#include "EditEmpMessBox.h"
+#include "EditEmpInfBox.h"
 
-EditEmpMessBox::EditEmpMessBox()
+EditEmpInfBox::EditEmpInfBox()
 {
     setWindowTitle("添加职工信息");
     //创建垂直布局
@@ -33,12 +33,12 @@ EditEmpMessBox::EditEmpMessBox()
     VBox->addLayout(HBox,1);
     this->setLayout(VBox);
 
-    //提交信息触发 saveEmpMess 这个自定义的槽
-    QObject::connect(submit, &QPushButton::clicked, this, &EditEmpMessBox::saveEmpMess);
-    QObject::connect(cancel, &QPushButton::clicked, this, &EditEmpMessBox::close);
+    //提交信息触发 saveEmpInf 这个自定义的槽
+    QObject::connect(submit, &QPushButton::clicked, this, &EditEmpInfBox::saveEmpInf);
+    QObject::connect(cancel, &QPushButton::clicked, this, &EditEmpInfBox::close);
 }
 
-void EditEmpMessBox::saveEmpMess()
+void EditEmpInfBox::saveEmpInf()
 {
     //判断所有数据是否都已经填写
     if(this->ID->text() != "" && this->name->text() != "" && this->sex->text() != "" && this->dept->text() != "" && this->tel->text() != "" && this->email->text() != "")
@@ -67,7 +67,7 @@ void EditEmpMessBox::saveEmpMess()
     }
 }
 
-void EditEmpMessBox::emitCloseBox()
+void EditEmpInfBox::emitCloseBox()
 {
     emit closeBox();
 }

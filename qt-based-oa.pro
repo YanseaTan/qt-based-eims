@@ -16,21 +16,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    EditEmpMessBox.cpp \
+    EditEmpInfBox.cpp \
     Employee.cpp \
     Tool.cpp \
     main.cpp \
     MainWidget.cpp
 
 HEADERS += \
-    EditEmpMessBox.h \
+    EditEmpInfBox.h \
     Employee.h \
     MainWidget.h \
     Tool.h
 
 # Default rules for deployment.
 
-TARGET = EmpMess-1.0
+TARGET = EmpInf-1.0
 
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
