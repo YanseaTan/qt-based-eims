@@ -33,3 +33,7 @@ A Qt-based visual employee information management system
 完成过程中参考教程[C语言中文网-Qt教程](http://c.biancheng.net/qt/)
 
 本人在教程基础上进行了一定改进，优化了部分判断逻辑，如将二进制存取文件（QDataStream）改为文本存取文件（QTextStream），实现了本地文件可以人为进行读写和信息的批量处理。
+
+## 下载
+
+- [EmpInfo-1.0](https://pan.baidu.com/s/19Kz5B6ENvii6V5_sfJR8Ig?pwd=0000)
